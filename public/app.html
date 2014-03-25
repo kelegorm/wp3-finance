@@ -22,14 +22,19 @@
 
 <div class="input-form" ng-controller="purchasePanelCtrl">
     <div class="container row">
-        <div class="day-choose span2 ">
+        <div class="day-choose span2" ng-controller="dateSelectCtrl">
+            <ul class="date-list">
+                <li ng-repeat="date in dates">
+                    <a href="" ng-click="date_click(date)" class="selected-{{selected(date)}}">{{readableDate(date)}}</a>
+                </li>
+            </ul>
             <small class="pull-right">Another date</small>
         </div>
         <div class="input-item span8">
             <form class="input-new-item" id="new-day" ng-submit="addPurchase()">
                 <input class="span6" name="name" size="16" type="text" placeholder="Good" ng-model="newPurchName"/>
                 <input class="span2 pull-right" name="price" size="16" type="number" placeholder="Price" ng-model="newPurchPrice"/>
-                <input class="span8" name="tags" size="16" type="text" placeholder="Tags"/>
+                <input class="span8" name="tags" size="16" type="text" placeholder="Tags" ng-model="newPurchTags"/>
                 <input class="btn pull-right input-hide" type="submit" value="Add!">
             </form>
         </div>
@@ -40,7 +45,7 @@
 </div>
 
 <div class="container" id="dayList" ng-controller="listCtrl">
-    <div class="day-item row" ng-repeat="day in days">
+    <div class="day-item row" ng-repeat="day in days | orderBy: 'date' : true ">
         <div class="date-column span2 bold">
             {{day.getDate()}}
             <p class="muted today-{{day.getToday()}}">Today</p>
@@ -49,7 +54,7 @@
             <div class="item" ng-repeat="purchase in day.purchases">
                 <span class="itemName">{{purchase.name}}</span>
                 <div class="pull-right">
-                    tagsTemplate(item)
+                    <span class="label itemTags" ng-repeat="tag in purchase.tags">{{tag}}</span>
                     <span class="itemPrice">{{purchase.price}}</span>
                     <span class="iconToDo icon-remove"></span>
                     <span class="iconToDo icon-pencil"></span>

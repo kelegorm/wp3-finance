@@ -100,6 +100,9 @@ li:hover{
     display: none;
 }
 
+.selected-true {
+    background-color: #bd362f;
+}
 
 
 

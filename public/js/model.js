@@ -1,37 +1,66 @@
 angular.module('myApp')
-    .service('myModel', function () {
-        var days = this.days = [
-            new Day(new Date(2014, 2, 8), [
-                {name:'Milk', price:10},
-                {name:'Beef', price:20}
-            ]),
-            new Day(new Date(2014, 1, 1), [
-                {name:'eggs', price:15},
-                {name:'Lay`s', price:35}
-            ])
+    .factory('myModel', function ($log, $rootScope) {
+        var days = [
         ];
 
-        this.addPurchase = function (date, newPurchase) {
+        var update = function () {
+            $.getJSON('/purchases', function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    var date = new Date(item.date);
+
+                    $log.log(date, " ", item);
+                    pushPurchase(date, item);
+                }
+
+                $rootScope.$broadcast('model.days.update');
+            });
+        };
+
+        var addPurchase = function (date, newPurchase) {
+            pushPurchase(date, newPurchase);
+            postPurchase(date, newPurchase);
+        };
+
+        var addDay = function (date) {
+            if (!getDayByDate(date)) {
+                pushNewDay(new Day(date));
+            }
+        };
+
+        var pushPurchase = function (date, newPurchase) {
             var day = getDayByDate(date);
             if (day) {
                 day.purchases.push(newPurchase);
             } else {
                 day = new Day(date, [newPurchase]);
-                this.addNewDay(day);
+                pushNewDay(day);
             }
         };
 
-        this.addNewDay = function (day) {
+        var postPurchase = function (date, newPurchase) {
+            var purchase = {
+                name: newPurchase.name,
+                price: newPurchase.price,
+                tags: newPurchase.tags || [],
+                date: date
+            };
+
+            $.post('/purchase', purchase, function () {
+            });
+        };
+
+        var pushNewDay = function (day) {
             var dayIndex = 0;
-            for (var i = 0; i < this.days.length; i++) {
-                var date = this.days[i].date;
+            for (var i = 0; i < days.length; i++) {
+                var date = days[i].date;
                 if (day.date.getTime() < date.getTime()) {
                     dayIndex = i;
                     break;
                 }
             }
 
-            this.days.splice(dayIndex, 0, day);
+            days.splice(dayIndex, 0, day);
         };
 
         var getDayByDate = function (date) {
@@ -66,4 +95,11 @@ angular.module('myApp')
                 return isToday(this.date);
             }
         }
+
+        return {
+            days: days,
+            update: update,
+            addPurchase: addPurchase,
+            addDay: addDay
+        };
     });

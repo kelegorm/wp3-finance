@@ -1,20 +1,60 @@
 angular.module('myApp', [])
 
+    .run(function (myModel) {
+        myModel.update();
+    })
+
     .controller('navigationBarCtrl', function ($scope, myNavigation) {
         $scope.showPurchaseForm = function () {
             myNavigation.showPurchaseForm();
         };
     })
 
-    .controller('purchasePanelCtrl', function($scope, myModel) {
-        $scope.addPurchase = function () {
+    .controller('dateSelectCtrl', function ($scope, $log, myModel) {
+        $scope.dates = [];
+        for (var i = 0; i < 7; i++) {
             var date = new Date();
-            var newPurchase = {name:$scope.newPurchName, price:$scope.newPurchPrice};
+            date.setDate(date.getDate() - i);
+            $scope.dates.push(date);
+        }
+
+        $scope.selected = function (date) {
+            return (daysIsSame(date, $scope.date))?'true':'false';
+        };
+
+        $scope.readableDate = getReadableDate;
+
+        $scope.date_click = function (date) {
+            myModel.addDay(date);
+            $scope.setDate(date);
+            //todo scroll to new day
+        };
+    })
+
+    .controller('purchasePanelCtrl', function($scope, myModel) {
+        $scope.newPurchName = '';
+        $scope.newPurchPrice = '';
+        $scope.newPurchTags = '';
+
+        $scope.date = new Date();
+
+        $scope.setDate = function (date) {
+            $scope.date = date;
+        };
+
+        $scope.addPurchase = function () {
+            var date = $scope.date;
+            var tags = $scope.newPurchTags.split(',');
+            for (var i = 0; i < tags.length; i++) {
+                tags[i] = $.trim(tags[i]);
+            }
+            var newPurchase = {name:$scope.newPurchName, price:$scope.newPurchPrice, tags:tags};
 
             myModel.addPurchase(date, newPurchase);
 
             $scope.newPurchName = '';
             $scope.newPurchPrice = '';
+            $scope.newPurchTags = '';
         };
 
         $scope.hideForm = function() {
@@ -34,7 +74,12 @@ angular.module('myApp', [])
         });
     })
 
-    .controller('listCtrl', function ($scope, myModel, myNavigation) {
+    .controller('listCtrl', function ($scope, $log, myModel, myNavigation) {
+        $scope.$on('model.days.update', function (event) {
+            $scope.$apply(function (){});
+            $log.log('days updated: ', $scope.days);
+        });
+
         $scope.days = myModel.days;
 
         $scope.showPurchaseForm = function () {
