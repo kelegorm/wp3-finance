@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src=jquery-1.10.2.js></script>
+    <script src='script.js'></script>
+    <script src='utils.js'></script>
+    <script src='templates.js'></script>
+
+
+    <title>Finance</title>
+</head>
+<body>
+    <div class="navbar navbar-color navbar-fixed-top">
+        <div class="container">
+            <div class="brand">Finance</div>
+            <div class="pull-right">
+                <ul class="nav">
+                    <li><a class="btnAddTable" href="#">+Add</a></li>
+                    <li><a href="/signout">SignOut</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="input-form">
+        <div class="container row">
+            <div class="day-choose span2 ">
+                <small class="pull-right">Another date</small>
+            </div>
+            <div class="input-item span8">
+                <form class="input-new-item" id="new-day">
+                <input class="span6" name="name" size="16" type="text" placeholder="Good"/>
+                <input class="span2 pull-right" name="price" size="16" type="text" placeholder="Price"/>
+                <input class="span8" name="tags" size="16" type="text" placeholder="Tags"/>
+                <input class="btn pull-right input-hide" type="submit" value="Add!">
+                </form>
+            </div>
+        </div>
+        <div class="input-button-hide">
+            <button class="btn btnHide">Hide!</button>
+        </div>
+    </div>
+
+    <div class="container" id="dayList">
+    </div>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+</html>

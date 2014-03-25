@@ -1,0 +1,107 @@
+body {
+    padding-top: 60px;
+}
+
+.brand {
+    padding: 10px;
+}
+
+.navbar-color {
+    background-color: #1f6377;
+}
+
+.bold {
+    font-size: 27px;
+}
+
+.day-item {
+    margin-top: -250px;
+    padding-top: 280px;
+}
+/*сделано для того, чтобы ссылки при выборе новой даты в форме ввода работали правильно*/
+
+.label {
+    margin-right: 10px;
+}
+
+.btnAdd {
+    padding-right: 45px;
+    padding-left: 45px;
+}
+
+.input-form {
+    background-color: rgba(186, 241, 236, 0.99);
+    margin-top: 40px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    display: none;
+    height: 164px;
+}
+
+ul {
+    list-style-type: none;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+li {
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: none;
+}
+
+li:hover{
+    background-color: rgba(0, 136, 204, 0.22);
+}
+
+.day-choose {
+    /*margin: -30px 10px;*/
+    /*padding: 30px 10px;*/
+    /*background-color: rgba(3, 4, 4, 0.13);*/
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 89, 133, 0.31);
+    padding-top: 10px;
+    margin-top: -15px;
+}
+
+.selected {
+    background-color: rgba(0, 136, 204, 0.22);
+}
+
+.btnHide {
+    width: 100%;
+    margin-top: 10px;
+    background-color: rgba(0, 136, 204, 0.22) ;
+}
+
+.iconToDo {
+    opacity: 0.11;
+}
+
+.iconToDo:hover{
+    opacity: 1;
+    color: #002a80;
+}
+
+.addNewItemExistDay {
+    opacity: 1;
+}
+
+.today-true {
+    display: inline;
+}
+
+.today-false {
+    display: none;
+}
+
+
+
+
+
+

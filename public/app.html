@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Indie-Tracker</title>
+    <meta charset="utf-8" />
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body ng-app="myApp">
+
+<div class="navbar navbar-color navbar-fixed-top" ng-controller="navigationBarCtrl">
+    <div class="container">
+        <div class="brand">Finance</div>
+        <div class="pull-right">
+            <ul class="nav">
+                <li><a ng-click="showPurchaseForm()" href="#">+Add</a></li>
+                <li><a href="/signout">SignOut</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="input-form" ng-controller="purchasePanelCtrl">
+    <div class="container row">
+        <div class="day-choose span2 ">
+            <small class="pull-right">Another date</small>
+        </div>
+        <div class="input-item span8">
+            <form class="input-new-item" id="new-day" ng-submit="addPurchase()">
+                <input class="span6" name="name" size="16" type="text" placeholder="Good" ng-model="newPurchName"/>
+                <input class="span2 pull-right" name="price" size="16" type="number" placeholder="Price" ng-model="newPurchPrice"/>
+                <input class="span8" name="tags" size="16" type="text" placeholder="Tags"/>
+                <input class="btn pull-right input-hide" type="submit" value="Add!">
+            </form>
+        </div>
+    </div>=
+    <div class="input-button-hide">
+        <a class="btn btnHide" ng-click="hideForm()" href="" >Hide!</a>
+    </div>
+</div>
+
+<div class="container" id="dayList" ng-controller="listCtrl">
+    <div class="day-item row" ng-repeat="day in days">
+        <div class="date-column span2 bold">
+            {{day.getDate()}}
+            <p class="muted today-{{day.getToday()}}">Today</p>
+        </div>
+        <div class="table-column span7">
+            <div class="item" ng-repeat="purchase in day.purchases">
+                <span class="itemName">{{purchase.name}}</span>
+                <div class="pull-right">
+                    tagsTemplate(item)
+                    <span class="itemPrice">{{purchase.price}}</span>
+                    <span class="iconToDo icon-remove"></span>
+                    <span class="iconToDo icon-pencil"></span>
+                </div>
+            </div>
+            <small><a class="addInExistDay text-info" ng-click="showPurchaseForm()" href=""> Add one more purchase</a></small>
+        </div>
+        <div class="total-column span2 bold">
+            {{day.getTotal()}}
+        </div>
+    </div>
+</div>
+
+<script src="js/libs/jquery-2.1.0.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/libs/angular.min.js"></script>
+<script src="js/date.utils.js"></script>
+<script src="js/app.js"></script>
+<script src="js/model.js"></script>
+<script src="js/navigation.js"></script>
+</body>
+</html>
