@@ -81,13 +81,14 @@ module.exports = function (app) {
             purchaseObject.tags = tags;
         }
 
-        Purchase.create(purchaseObject, function(error) {
+        Purchase.create(purchaseObject, function(error, doc) {
             if (error) {
                 console.log("purchase creating error:" + name);
                 res.send(401, "purchase creating error");
-                return;
+            } else {
+                console.log('Created new doc: ', doc);
+                res.send(200, doc._id);
             }
-            res.send(200);
         });
     });
 

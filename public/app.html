@@ -56,7 +56,7 @@
                 <div class="pull-right">
                     <span class="label itemTags" ng-repeat="tag in purchase.tags">{{tag}}</span>
                     <span class="itemPrice">{{purchase.price}}</span>
-                    <span class="iconToDo icon-remove"></span>
+                    <a href="" ng-click="deletePurchase(purchase)"><span class="iconToDo icon-remove"></span></a>
                     <span class="iconToDo icon-pencil"></span>
                 </div>
             </div>

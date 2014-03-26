@@ -31,7 +31,7 @@ angular.module('myApp', [])
         };
     })
 
-    .controller('purchasePanelCtrl', function($scope, myModel) {
+    .controller('purchasePanelCtrl', function($scope, $log, myModel) {
         $scope.newPurchName = '';
         $scope.newPurchPrice = '';
         $scope.newPurchTags = '';
@@ -48,9 +48,9 @@ angular.module('myApp', [])
             for (var i = 0; i < tags.length; i++) {
                 tags[i] = $.trim(tags[i]);
             }
-            var newPurchase = {name:$scope.newPurchName, price:$scope.newPurchPrice, tags:tags};
+            var newPurchase = {date: date, name:$scope.newPurchName, price:$scope.newPurchPrice, tags:tags};
 
-            myModel.addPurchase(date, newPurchase);
+            myModel.addPurchase(newPurchase);
 
             $scope.newPurchName = '';
             $scope.newPurchPrice = '';
@@ -81,6 +81,11 @@ angular.module('myApp', [])
         });
 
         $scope.days = myModel.days;
+
+        $scope.deletePurchase = function (purchase) {
+            $log.log('purchasePanelCtrl::deletePurchase: ', purchase);
+            myModel.deletePurchase(purchase);
+        };
 
         $scope.showPurchaseForm = function () {
             myNavigation.showPurchaseForm();

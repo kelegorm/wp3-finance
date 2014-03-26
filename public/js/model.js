@@ -8,18 +8,24 @@ angular.module('myApp')
                 for (var i = 0; i < data.length; i++) {
                     var item = data[i];
                     var date = new Date(item.date);
+                    item.date = date;
 
-                    $log.log(date, " ", item);
-                    pushPurchase(date, item);
+                    pushPurchase(item);
                 }
 
                 $rootScope.$broadcast('model.days.update');
             });
         };
 
-        var addPurchase = function (date, newPurchase) {
-            pushPurchase(date, newPurchase);
-            postPurchase(date, newPurchase);
+        var addPurchase = function (newPurchase) {
+//            pushPurchase(date, newPurchase);
+            postPurchase(newPurchase, function (error, purchaseId) {
+                if (!error) {
+                    newPurchase._id = purchaseId;
+                    pushPurchase(newPurchase);
+                    $rootScope.$broadcast('model.days.update');
+                }
+            });
         };
 
         var addDay = function (date) {
@@ -28,26 +34,44 @@ angular.module('myApp')
             }
         };
 
-        var pushPurchase = function (date, newPurchase) {
-            var day = getDayByDate(date);
+        var pushPurchase = function (newPurchase) {
+            var day = getDayByDate(newPurchase.date);
             if (day) {
                 day.purchases.push(newPurchase);
             } else {
-                day = new Day(date, [newPurchase]);
+                day = new Day(newPurchase.date, [newPurchase]);
                 pushNewDay(day);
             }
         };
 
-        var postPurchase = function (date, newPurchase) {
+        var postPurchase = function (newPurchase, callback) {
             var purchase = {
                 name: newPurchase.name,
                 price: newPurchase.price,
                 tags: newPurchase.tags || [],
-                date: date
+                date: newPurchase.date
             };
 
-            $.post('/purchase', purchase, function () {
+            $.post('/purchase', purchase, function (docId) {
+                callback(null, docId);
             });
+        };
+
+        var deletePurchase = function (purchase) {
+            var purchaseId = purchase._id;
+
+            $.ajax({
+                url: '/purchase/' + purchaseId,
+                type:'DELETE'
+            })
+                .done(function() {
+                    var day = getDayByDate(purchase.date);
+                    if (day) {
+                        day.deletePurchase(purchase);
+                    }
+
+                    $rootScope.$broadcast('model.days.update');
+                });
         };
 
         var pushNewDay = function (day) {
@@ -93,13 +117,21 @@ angular.module('myApp')
 
             this.getToday = function () {
                 return isToday(this.date);
-            }
+            };
+
+            this.deletePurchase = function (purchase) {
+                var purchaseIndex = purchases.indexOf(purchase);
+                if (purchaseIndex >= 0) {
+                    purchases.splice(purchaseIndex, 1);
+                }
+            };
         }
 
         return {
             days: days,
             update: update,
             addPurchase: addPurchase,
-            addDay: addDay
+            addDay: addDay,
+            deletePurchase: deletePurchase
         };
     });
