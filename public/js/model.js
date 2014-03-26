@@ -7,8 +7,7 @@ angular.module('myApp')
             $.getJSON('/purchases', function (data) {
                 for (var i = 0; i < data.length; i++) {
                     var item = data[i];
-                    var date = new Date(item.date);
-                    item.date = date;
+                    item.date = new Date(item.date);
 
                     pushPurchase(item);
                 }
