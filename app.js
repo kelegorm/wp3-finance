@@ -40,31 +40,23 @@ mongoose.connect(getMongodbURL(), function(error) {
 });
 
 function getMongodbURL() {
-    if(process.env.VCAP_SERVICES){
-        var env = JSON.parse(process.env.VCAP_SERVICES);
-        var mongo = env['mongodb-1.8'][0]['credentials'];
+    if (process.env.VCAP_SERVICES) {
+        var mongo = JSON.parse(process.env.VCAP_SERVICES)['mongodb-1.8'][0]['credentials'];
     }
-    else{
-        var mongo = {
+
+    if (!mongo) {
+        mongo = {
             "hostname":"localhost",
             "port":27017,
-            "username":"",
-            "password":"",
-            "name":"",
             "db":"finance"
         }
     }
-    var generate_mongo_url = function(obj){
-        obj.hostname = (obj.hostname || 'localhost');
-        obj.port = (obj.port || 27017);
-        obj.db = (obj.db || 'test');
-        if(obj.username && obj.password){
-            return "mongodb://" + obj.username + ":" + obj.password + "@" + obj.hostname + ":" + obj.port + "/" + obj.db;
-        }
-        else{
-            return "mongodb://" + obj.hostname + ":" + obj.port + "/" + obj.db;
-        }
+
+    var result = 'mongodb://';
+    if (mongo.username && mongo.password) {
+        result += mongo.username + ":" + mongo.password + "@";
     }
-    var mongourl = generate_mongo_url(mongo);
-    return mongourl;
+
+    result += mongo.hostname + ":" + mongo.port + '/' + mongo.db;
+    return result;
 }
